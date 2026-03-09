@@ -1,0 +1,17 @@
+{
+  "tools": [
+    {"name": "uv", "install": {"macos": "curl -LsSf https://astral.sh/uv/install.sh | sh", "windows": "curl -LsSf https://astral.sh/uv/install.sh | sh", "ubuntu": "curl -LsSf https://astral.sh/uv/install.sh | sh"}},
+    {"name": "git", "install": {"macos": "brew install git", "windows": "winget install --id Git.Git -e --source winget", "ubuntu": "sudo apt install -y git"}}
+  ],
+  "path_entries": ["~/.local/bin", "~/.local/share/python-standalone/python"],
+  "venv": {"check_imports": ["yaml"]},
+  "json_entries": [
+    {"reference": "known_marketplaces.json", "target": "~/.claude/plugins/known_marketplaces.json", "merge_fields": ["source", "autoUpdate"], "preserve_fields": ["lastUpdated", "installLocation"]}
+  ],
+  "marketplaces": [
+    {"name": "plugins-kit", "source": "https://github.com/kitaekatt/plugins-kit.git"}
+  ],
+  "plugins": [
+    {"ref": "plugins-kit:bootstrap", "enabled": true}
+  ]
+}

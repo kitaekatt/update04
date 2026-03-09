@@ -1,0 +1,7 @@
+{
+  "name": "update",
+  "version": "1.0.0",
+  "description": "Seed bootstrap plugin — installs plugins-kit marketplace and bootstrap plugin",
+  "author": {"name": "Christina"},
+  "keywords": ["bootstrap", "seed", "update"]
+}

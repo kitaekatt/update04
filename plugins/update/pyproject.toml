@@ -1,0 +1,7 @@
+[project]
+name = "update"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+  "bootstrap @ git+https://github.com/kitaekatt/plugins-kit.git#subdirectory=plugins/bootstrap"
+]
