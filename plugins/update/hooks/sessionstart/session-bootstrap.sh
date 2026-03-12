@@ -124,6 +124,14 @@ PYTHON=""
 OS="$(uname -s)"
 STANDALONE_DIR="${HOME}/.local/share/python-standalone"
 
+# Schannel (Windows-native TLS) can fail with CRYPT_E_NO_REVOCATION_CHECK on
+# corporate networks. --ssl-revoke-best-effort still checks when possible but
+# doesn't hard-fail when the revocation server is unreachable.
+CURL_FLAGS=()
+if [[ "$OS" == MINGW* ]] || [[ "$OS" == MSYS* ]]; then
+    CURL_FLAGS=(--ssl-revoke-best-effort)
+fi
+
 if [[ "$OS" == MINGW* ]] || [[ "$OS" == MSYS* ]]; then
     WANT_PYTHON="${STANDALONE_DIR}/python/python.exe"
     STANDALONE_PYTHON="${STANDALONE_DIR}/python/python.exe"
@@ -171,7 +179,7 @@ if [ -z "$PYTHON" ]; then
     log_entry "python3: downloading $ARCHIVE"
     mkdir -p "$STANDALONE_DIR"
     _dl_tmp="$STANDALONE_DIR/$ARCHIVE"
-    if curl -LsSf "$URL" -o "$_dl_tmp" 2>/dev/null && tar xzf "$_dl_tmp" -C "$STANDALONE_DIR" 2>/dev/null; then
+    if curl -LsSf "${CURL_FLAGS[@]}" "$URL" -o "$_dl_tmp" 2>/dev/null && tar xzf "$_dl_tmp" -C "$STANDALONE_DIR" 2>/dev/null; then
         rm -f "$_dl_tmp"
         if [[ "$OS" == MINGW* ]] || [[ "$OS" == MSYS* ]]; then
             log_entry "python3: installed standalone at $STANDALONE_PYTHON"
@@ -221,7 +229,7 @@ fi
 # --- Ensure uv is available ---
 if ! command -v uv &>/dev/null; then
     log_entry "uv: not found, installing"
-    if curl -LsSf https://astral.sh/uv/install.sh | sh 2>/dev/null; then
+    if curl -LsSf "${CURL_FLAGS[@]}" https://astral.sh/uv/install.sh | sh 2>/dev/null; then
         log_entry "uv: installed"
     else
         log_entry "uv: FAILED - install error"
