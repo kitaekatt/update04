@@ -22,30 +22,49 @@ STALE_MARKETPLACES = ["update01", "update02", "update03", "update04", "update05"
 
 
 def _cleanup_stale_marketplaces(stale_names, action_entries, ok_entries, log_success):
-    """Remove old update0x marketplace entries from known_marketplaces.json."""
-    km_path = os.path.join(os.path.expanduser("~"), ".claude", "plugins", "known_marketplaces.json")
+    """Remove old update0x entries from known_marketplaces.json and installed_plugins.json."""
+    plugins_dir = os.path.join(os.path.expanduser("~"), ".claude", "plugins")
+    any_removed = False
+
+    # Clean known_marketplaces.json
+    km_path = os.path.join(plugins_dir, "known_marketplaces.json")
     try:
         with open(km_path, "r") as f:
             km = json.load(f)
+        removed = [name for name in stale_names if name in km]
+        if removed:
+            for name in removed:
+                del km[name]
+            with open(km_path, "w") as f:
+                json.dump(km, f, indent=2)
+                f.write("\n")
+            for name in removed:
+                action_entries.append(f"stale marketplace: removed {name} from known_marketplaces.json")
+            any_removed = True
     except (FileNotFoundError, json.JSONDecodeError, OSError):
-        return
-
-    removed = [name for name in stale_names if name in km]
-    if not removed:
-        if log_success:
-            ok_entries.append("stale marketplaces: none found")
-        return
-
-    for name in removed:
-        del km[name]
-    try:
-        with open(km_path, "w") as f:
-            json.dump(km, f, indent=2)
-            f.write("\n")
-        for name in removed:
-            action_entries.append(f"stale marketplace: removed {name} from known_marketplaces.json")
-    except OSError:
         pass
+
+    # Clean installed_plugins.json
+    ip_path = os.path.join(plugins_dir, "installed_plugins.json")
+    try:
+        with open(ip_path, "r") as f:
+            ip = json.load(f)
+        plugins = ip.get("plugins", {})
+        stale_keys = [k for k in plugins if any(k == f"update@{name}" for name in stale_names)]
+        if stale_keys:
+            for key in stale_keys:
+                del plugins[key]
+            with open(ip_path, "w") as f:
+                json.dump(ip, f, indent=2)
+                f.write("\n")
+            for key in stale_keys:
+                action_entries.append(f"stale plugin: removed {key} from installed_plugins.json")
+            any_removed = True
+    except (FileNotFoundError, json.JSONDecodeError, OSError):
+        pass
+
+    if not any_removed and log_success:
+        ok_entries.append("stale marketplaces: none found")
 
 
 def main():
