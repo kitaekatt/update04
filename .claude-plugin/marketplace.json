@@ -2,15 +2,19 @@
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "update04",
   "description": "Auto-update bootstrap marketplace for team plugin management",
-  "owner": {"name": "kitaekatt"},
+  "owner": {
+    "name": "kitaekatt"
+  },
   "plugins": [
     {
       "name": "update",
-      "description": "Seed bootstrap plugin — installs plugins-kit marketplace and bootstrap plugin on team machines",
-      "version": "1.0.2",
-      "author": {"name": "Christina"},
+      "description": "Seed bootstrap plugin \u2014 installs plugins-kit marketplace and bootstrap plugin on team machines",
+      "author": {
+        "name": "Christina"
+      },
       "source": "./plugins/update",
-      "category": "development"
+      "category": "development",
+      "version": "1.0.5"
     }
   ]
 }
