@@ -124,6 +124,22 @@ def main():
     version_suffix = f"@{version}" if version else ""
     label = f"{marketplace_name}:{plugin_name}{version_suffix}" if marketplace_name else f"{plugin_name}{version_suffix}"
 
+    # Step 2b: Version change detection
+    if version:
+        last_version_file = os.path.join(data_dir, "last_version")
+        try:
+            with open(last_version_file, "r") as f:
+                last_version = f.read().strip()
+        except FileNotFoundError:
+            last_version = ""
+        if last_version and last_version != version:
+            action_entries.append(f"updated: {last_version} -> {version}")
+        elif not last_version:
+            action_entries.append(f"installed: {version}")
+        os.makedirs(data_dir, exist_ok=True)
+        with open(last_version_file, "w") as f:
+            f.write(version)
+
     # Step 3: Self-setup — no-op (config has no self_setup)
     self_setup = config.get("self_setup", {})
     failures = _process_self_setup(self_setup, current_os, data_dir, plugin_root, action_entries, ok_entries)
