@@ -1,10 +1,14 @@
 {
   "plugins-kit": {
     "source": {"source": "git", "url": "https://github.com/kitaekatt/plugins-kit.git"},
-    "autoUpdate": true
+    "autoUpdate": true,
+    "installLocation": "",
+    "lastUpdated": ""
   },
   "update06": {
     "source": {"source": "git", "url": "https://github.com/kitaekatt/update06.git"},
-    "autoUpdate": true
+    "autoUpdate": true,
+    "installLocation": "",
+    "lastUpdated": ""
   }
 }
