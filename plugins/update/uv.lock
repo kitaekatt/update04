@@ -4,8 +4,8 @@ requires-python = ">=3.12, !=3.14.*"
 
 [[package]]
 name = "bootstrap"
-version = "0.10.13"
-source = { git = "https://github.com/kitaekatt/plugins-kit.git?subdirectory=plugins%2Fbootstrap#0196d6f06245e2abb640bf1caa15d7d172194c1b" }
+version = "0.10.14"
+source = { git = "https://github.com/kitaekatt/plugins-kit.git?subdirectory=plugins%2Fbootstrap#de449f7d8a1759b3d8cac69f071223a3fa49f949" }
 dependencies = [
     { name = "pyyaml" },
 ]
